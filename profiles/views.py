@@ -2,11 +2,13 @@ from django.shortcuts import render
 
 from .models import Profile
 
+
 def index(request):
     """List all profiles."""
     profiles_list = Profile.objects.all()
     context = {'profiles_list': profiles_list}
     return render(request, 'profiles/index.html', context)
+
 
 def profile(request, username):
     """Display a single user's profile."""

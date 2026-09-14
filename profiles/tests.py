@@ -1,3 +1,1 @@
-from django.test import TestCase
-
-# Create your tests here.
+# Tests for this app will be written in Étape 2 (W3-T4).
