@@ -1,3 +1,4 @@
+"""Configuration for the profiles app."""
 from django.apps import AppConfig
 
 

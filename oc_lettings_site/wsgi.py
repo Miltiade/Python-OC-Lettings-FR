@@ -1,3 +1,4 @@
+"""WSGI entrypoint for the OC Lettings project."""
 import os
 
 from django.core.wsgi import get_wsgi_application

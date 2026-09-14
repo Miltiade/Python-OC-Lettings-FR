@@ -1,3 +1,4 @@
+"""Root URL configuration: includes app URLconf modules."""
 from django.contrib import admin
 from django.urls import include, path
 
