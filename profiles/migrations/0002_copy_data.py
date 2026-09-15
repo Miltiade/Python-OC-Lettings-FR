@@ -20,6 +20,7 @@ def copy_profiles_data(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('oc_lettings_site', '0001_initial'),  # ← ADDED: run old app first
         ('profiles', '0001_initial'),
     ]
 
