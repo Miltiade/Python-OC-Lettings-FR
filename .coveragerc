@@ -1,0 +1,14 @@
+[run]
+source =
+    lettings
+    profiles
+    oc_lettings_site
+omit =
+    */migrations/*
+    */apps.py
+    */asgi.py
+    */wsgi.py
+    */tests.py
+
+[report]
+show_missing = True
