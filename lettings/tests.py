@@ -1,5 +1,4 @@
 """Tests for the lettings app."""
-
 import pytest
 from django.urls import reverse
 
@@ -13,20 +12,22 @@ class TestLettingsModels:
     def test_address_str(self):
         """Address.__str__ returns formatted address."""
         address = Address.objects.create(
-            street_address="123 Main St",
-            zip_code="90210",
+            number=123,
+            street="Main St",
             city="Beverly Hills",
-            country="USA"
+            zip_code=90210,
+            country_iso_code="USA"
         )
-        assert str(address) == "123 Main St, Beverly Hills, USA"
+        assert str(address) == "123 Main St"
 
     def test_letting_str(self):
         """Letting.__str__ returns letting title."""
         address = Address.objects.create(
-            street_address="456 Oak Ave",
-            zip_code="10001",
+            number=456,
+            street="Oak Ave",
             city="New York",
-            country="USA"
+            zip_code=10001,
+            country_iso_code="USA"
         )
         letting = Letting.objects.create(title="Cozy Apartment", address=address)
         assert str(letting) == "Cozy Apartment"
@@ -38,12 +39,14 @@ class TestLettingsViews:
 
     def test_index_returns_200_and_context(self, client):
         """Index view returns 200 with lettings_list in context."""
-        Address.objects.create(
-            street_address="111 Test St",
-            zip_code="12345",
+        address = Address.objects.create(
+            number=111,
+            street="Test St",
             city="Testville",
-            country="Testland"
+            zip_code=12345,
+            country_iso_code="Testland"
         )
+        Letting.objects.create(title="Test Listing", address=address)
         response = client.get(reverse('lettings:index'))
         assert response.status_code == 200
         assert 'lettings_list' in response.context
@@ -52,15 +55,13 @@ class TestLettingsViews:
     def test_letting_detail_returns_200_and_context(self, client):
         """Letting detail view returns 200 with correct context."""
         address = Address.objects.create(
-            street_address="789 Detail Rd",
-            zip_code="54321",
+            number=789,
+            street="Detail Rd",
             city="Detailtown",
-            country="Detailia"
+            zip_code=54321,
+            country_iso_code="Detailia"
         )
-        letting = Letting.objects.create(
-            title="Detailed Property",
-            address=address
-        )
+        letting = Letting.objects.create(title="Detailed Property", address=address)
         url = reverse('lettings:letting', kwargs={'letting_id': letting.id})
         response = client.get(url)
         assert response.status_code == 200

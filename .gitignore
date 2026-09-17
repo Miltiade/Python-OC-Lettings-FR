@@ -6,3 +6,4 @@ SPIKE_NOTES.md
 # local artifacts
 lint_baseline.txt
 *.bak.*
+.coverage
