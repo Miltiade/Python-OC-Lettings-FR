@@ -7,3 +7,4 @@ SPIKE_NOTES.md
 lint_baseline.txt
 *.bak.*
 .coverage
+.env
