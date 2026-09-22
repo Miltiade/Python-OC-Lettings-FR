@@ -8,3 +8,4 @@ lint_baseline.txt
 *.bak.*
 .coverage
 .env
+staticfiles/
