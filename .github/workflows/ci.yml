@@ -69,8 +69,7 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/oc-lettings:$SHORT_HASH
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/oc-lettings:latest
 
-  # Job 3: deploy — placeholder, skeleton only
-  # TODO: replace RENDER_DEPLOY_HOOK_URL with actual Render URL in W4-T4
+  # Job 3: deploy — triggers Render deploy hook (production release)
   deploy:
     runs-on: ubuntu-latest
     needs: dockerize  # waits for dockerize success
@@ -78,7 +77,5 @@ jobs:
     steps:
       - name: Deploy to Render
         run: |
-          echo "Deploy triggered on master after successful dockerize"
-          # TODO: uncomment once Render URL is known:
-          # curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
-          
+          echo "Deploying to Render after successful dockerize"
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}    
