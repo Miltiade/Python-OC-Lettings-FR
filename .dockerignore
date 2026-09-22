@@ -1,0 +1,9 @@
+venv/
+.env
+.git/
+__pycache__/
+*.pyc
+staticfiles/
+.coverage
+lint_baseline.txt
+SPIKE_NOTES.md
