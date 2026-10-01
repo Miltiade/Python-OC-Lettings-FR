@@ -2,6 +2,7 @@
 *.pyc
 venv
 SPIKE_NOTES.md
+*.bak
 
 # local artifacts
 lint_baseline.txt
