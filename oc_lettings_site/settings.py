@@ -6,6 +6,8 @@ from pathlib import Path
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
+import urllib.parse
+
 # Sentry error tracking: DSN read from environment, disabled if unset.
 SENTRY_DSN = os.environ.get('SENTRY_DSN', '')
 if SENTRY_DSN:
@@ -80,13 +82,28 @@ WSGI_APPLICATION = 'oc_lettings_site.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'oc-lettings-site.sqlite3'),
+# Production: PostgreSQL via the DATABASE_URL environment variable
+# (provided by Render). Local development: SQLite fallback, unchanged.
+if os.environ.get('DATABASE_URL'):
+    _db_url = urllib.parse.urlparse(os.environ['DATABASE_URL'])
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': urllib.parse.unquote(_db_url.path.lstrip('/')),
+            'USER': urllib.parse.unquote(_db_url.username or ''),
+            'PASSWORD': urllib.parse.unquote(_db_url.password or ''),
+            'HOST': _db_url.hostname or '',
+            'PORT': str(_db_url.port or 5432),
+            'CONN_MAX_AGE': 600,  # persistent connections, Render best practice
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'oc-lettings-site.sqlite3'),
+        }
+    }
 
 
 # Password validation
