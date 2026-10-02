@@ -95,6 +95,9 @@ if os.environ.get('DATABASE_URL'):
             'HOST': _db_url.hostname or '',
             'PORT': str(_db_url.port or 5432),
             'CONN_MAX_AGE': 600,  # persistent connections, Render best practice
+            # Django 3.0 asserts the session timezone is exactly "UTC";
+            # PostgreSQL 18 sessions default to "Etc/UTC". Force it.
+            'OPTIONS': {'options': '-c timezone=UTC'},
         }
     }
 else:
