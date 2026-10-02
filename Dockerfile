@@ -15,5 +15,5 @@ COPY . .
 
 EXPOSE 8000
 
-# Collect static files at startup, then serve with gunicorn
-CMD ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
+# Migrate schema, collect static files, bootstrap fresh DB if needed, then serve
+CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py bootstrap_prod && gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:${PORT:-8000}"]
