@@ -7,6 +7,7 @@ from django.core.management import call_command
 from django.core.management.base import BaseCommand
 from django.db import connection
 
+
 class Command(BaseCommand):
     """Load demo data and create superuser if needed on a fresh database.
 
@@ -68,8 +69,9 @@ class Command(BaseCommand):
             if os.environ.get("DATABASE_URL"):
                 self.stderr.write(
                     self.style.WARNING(
-                        "No DJANGO_SUPERUSER_PASSWORD set: admin login DISABLED on this deployment. "
-                        "Please add this environment variable in Render dashboard to enable admin access."
+                        "No DJANGO_SUPERUSER_PASSWORD set: admin login "
+                        "DISABLED on this deployment. Please add this "
+                        "environment variable in Render dashboard to enable admin access."
                     )
                 )
             else:
@@ -79,4 +81,3 @@ class Command(BaseCommand):
                 )
 
         self.stdout.write(self.style.SUCCESS("Bootstrap complete."))
-        
