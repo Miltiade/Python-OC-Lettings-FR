@@ -8,6 +8,11 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 import urllib.parse
 
+import django.db.backends.postgresql.utils
+
+from datetime import timezone as _dt_timezone
+
+
 # Sentry error tracking: DSN read from environment, disabled if unset.
 SENTRY_DSN = os.environ.get('SENTRY_DSN', '')
 if SENTRY_DSN:
@@ -108,6 +113,24 @@ else:
         }
     }
 
+# ------------------------------------------------------------------
+# Compatibility: Django 3.0 x psycopg2 >= 2.9
+# psycopg2 2.9 passes the timezone offset as a datetime.timedelta
+# instead of an int. Django 3.0's utc_tzinfo_factory compares it with
+# "!= 0", always True for a timedelta, crashing every query with
+# "AssertionError: database connection isn't set to UTC". The official
+# fix (Django 2.2.21 / 3.1.9) checks truthiness instead; Django 3.0
+# being EOL, we replicate it here.
+
+
+def _utc_tzinfo_factory(offset):
+    """Replicates Django >= 3.1.9 tzinfo factory (psycopg2 2.9 support)."""
+    if offset:
+        raise AssertionError("database connection isn't set to UTC")
+    return _dt_timezone.utc
+
+
+django.db.backends.postgresql.utils.utc_tzinfo_factory = _utc_tzinfo_factory
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
